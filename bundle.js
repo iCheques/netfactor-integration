@@ -990,6 +990,7 @@ extend(Component.prototype, {
 function render(vnode, parent, merge) {
   return diff(merge, vnode, {}, false, parent, false);
 }
+//# sourceMappingURL=preact.esm.js.map
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -3423,6 +3424,11 @@ function sendChecks() {
 
   var loop = function () {
     if (!cmc7Regex.test(n.nodeValue)) { return; }
+
+    if (!n.parentElement.parentElement.getElementsByClassName('ObInputCheckBox').item(0).checked) {
+      return;
+    }
+
     var object = {
       currentNode: n.parentElement.parentElement,
       cmc: get_1(n, 'nodeValue'),
