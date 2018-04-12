@@ -1,0 +1,9 @@
+extends: airbnb
+rules:
+  react/react-in-jsx-scope: 0
+  react/prop-types: 0
+  react/jsx-closing-tag-location: 0
+  react/no-unused-state: 0
+  no-cond-assign: 0
+  no-continue: 0
+  

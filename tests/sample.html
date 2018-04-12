@@ -1,0 +1,827 @@
+<html>
+<head>
+    <!--Aponta para o arquivo de configuracoes de cores cores.css -->
+    <style>
+        /* START CSS NEEDED ONLY IN DEMO */
+        
+        .tpopupbuttonblack {
+            BORDER-RIGHT: 2pt solid Black;
+            BORDER-TOP: 2pt solid #D5D5FF;
+            FONT-WEIGHT: bold;
+            FONT-SIZE: 8pt;
+            BORDER-LEFT: 2pt solid #D5D5FF;
+            COLOR: Black;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: #FFFFFF;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        body {
+            font-family: Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+            /**	text-align:center;*/
+        }
+        
+        #mainContainer {
+            width: 660px;
+            margin: 0 auto;
+            text-align: left;
+            height: 100%;
+            background-color: #FFF;
+            border-left: 3px double #000;
+            border-right: 3px double #000;
+        }
+        
+        #formContent {
+            padding: 5px;
+        }
+        /* END CSS ONLY NEEDED IN DEMO */
+        /* Big box with list of options */
+        
+        #ajax_listOfOptions {
+            position: absolute;
+            /* Never change this one */
+            width: 175px;
+            /* Width of box */
+            height: 250px;
+            /* Height of box */
+            overflow: auto;
+            /* Scrolling features */
+            border: 1px solid #317082;
+            /* Dark green border */
+            background-color: #FFF;
+            /* White background color */
+            text-align: left;
+            font-size: 0.9em;
+            z-index: 100;
+        }
+        
+        #ajax_listOfOptions div {
+            /* General rule for both .optionDiv and .optionDivSelected */
+            margin: 1px;
+            padding: 1px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        #ajax_listOfOptions .optionDiv {
+            /* Div for each item in list */
+        }
+        
+        #ajax_listOfOptions .optionDivSelected {
+            /* Selected item in the list */
+            background-color: #317082;
+            color: #FFF;
+        }
+        
+        #ajax_listOfOptions_iframe {
+            background-color: #F00;
+            position: absolute;
+            z-index: 5;
+        }
+        
+        form {
+            display: inline;
+        }
+        
+        #hintbox {
+            /*CSS for pop up hint box */
+            position: absolute;
+            top: 0;
+            background-color: lightyellow;
+            width: 150px;
+            /*Default width of hint.*/
+            padding: 3px;
+            border: 1px solid black;
+            font: normal 11px Verdana;
+            line-height: 18px;
+            z-index: 100;
+            border-right: 3px solid black;
+            border-bottom: 3px solid black;
+            visibility: hidden;
+        }
+        
+        .hintanchor {
+            /*CSS for link that shows hint onmouseover*/
+            font-weight: bold;
+            color: navy;
+            margin: 3px 8px;
+        }
+        
+        .tpopupbuttonblack {
+            BORDER-RIGHT: 2pt solid Black;
+            BORDER-TOP: 2pt solid #D5D5FF;
+            FONT-WEIGHT: bold;
+            FONT-SIZE: 8pt;
+            BORDER-LEFT: 2pt solid #D5D5FF;
+            COLOR: Black;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: #FFFFFF;
+        }
+        
+        body {
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 10px;
+        }
+        
+        .info,
+        .success,
+        .error,
+        .validation {
+            border: 1px solid;
+            margin: 10px 0px;
+            padding: 15px 10px 15px 15px;
+            background-repeat: no-repeat;
+            background-position: 10px center;
+        }
+        
+        .info {
+            color: #00529B;
+            background-color: #BDE5F8;
+        }
+        
+        .success {
+            color: #4F8A10;
+            background-color: #DFF2BF;
+        }
+        
+        .warning {
+            color: #9F6000;
+            background-color: #FEEFB3;
+        }
+        
+        .error {
+            color: #D8000C;
+            background-color: #FFBABA;
+        }
+        
+        table.calendar {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 0.8em;
+            border-collapse: collapse;
+            background-color: white;
+            border: solid #999999 1px;
+            background-color: white;
+            width: 200px;
+            text-align: center;
+            /*prevent user from selecting text in Mozilla & Safari - check calendar constructor for IE code)*/
+            -moz-user-select: none;
+            /*-khtml-user-select: none;*/
+        }
+        
+        table.calendar input,
+        table.calendar select {
+            font-size: 8px;
+        }
+        
+        table.calendar td {
+            border: 0;
+            font-size: 8px;
+            text-align: center;
+        }
+        
+        div.mainheading {
+            margin: 2px;
+        }
+        
+        table.caldayheading {
+            border-collapse: collapse;
+            cursor: pointer;
+            empty-cells: show;
+            margin: 0 6px 0 6px;
+        }
+        
+        table.caldayheading td {
+            border: solid #CCCCCC 1px;
+            text-align: left;
+            color: #0054E3;
+            font-weight: bold;
+            width: 22px;
+            /*should match calendar cell's width*/
+        }
+        
+        table.caldayheading td.wkhead {
+            border-right: double #CCCCCC 3px;
+        }
+        
+        table.calcells {
+            border-collapse: collapse;
+            cursor: pointer;
+            margin: 0 6px 0 6px;
+        }
+        
+        table.calcells td {
+            border: solid #CCCCCC 1px;
+            vertical-align: top;
+            text-align: left;
+            font-weight: bold;
+            width: 22px;
+            height: 20px;
+            /*IE doesn't like ems*/
+        }
+        
+        table.calcells td div {
+            padding: 1px;
+            margin: 0;
+        }
+        
+        table.calcells td.wkhead {
+            background-color: white;
+            text-align: center;
+            border-right: double #CCCCCC 3px;
+            color: #0054E3;
+        }
+        
+        table.calcells td.wkday {
+            background-color: #DDDDDD;
+        }
+        
+        table.calcells td.wkend {
+            background-color: #DDDDDD;
+        }
+        
+        table.calcells td.curdate {}
+        
+        table.calcells td.cell_selected {
+            background-color: #99CCFF;
+            color: black;
+        }
+        
+        table.calcells td.notmnth {
+            background-color: #FFFFFF;
+            color: #CCCCCC;
+        }
+        
+        table.calcells td.notallowed {
+            background-color: white;
+            color: #EEEEEE;
+            font-style: italic;
+        }
+        
+        table.calcells td.hover {
+            background-color: #999999;
+        }
+        /*Definições de cores do cabeçalho da tela*/
+        
+        .tcabecalhosistema {
+            font: bold;
+            background-color: #00006F;
+            background-position: center;
+            text-decoration: none;
+            color: #DEFAEC;
+            margin: auto;
+        }
+        /* Definições de cores do corpo da pagina*/
+        
+        TBODY {
+            FONT-SIZE: 8pt;
+            COLOR: Black;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: transparent;
+        }
+        /*Definicões de cores da tela de dados*/
+        
+        THEAD {
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 8pt;
+            color: white;
+            FONT-FAMILY: Verdana, Geneva, Arial, Helvetica, sans-serif;
+            background-color: #00006F;
+            border: thick dashed;
+            border-style: solid;
+        }
+        /*Definicões de cores da tela de dados*/
+        
+        .trodteladedados {
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 8pt;
+            COLOR: White;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            background-color: #E6E6FA;
+            font: bold;
+        }
+        /*Definicões de cores da tela de dados*/
+        
+        .tteladedados {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid #D5D5FF;
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 8pt;
+            BORDER-LEFT: 2pt solid #D5D5FF;
+            COLOR: Black;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: #E6E6FA;
+            BORDER-BOTTOM: 2pt solid Black;
+        }
+        /*Definições de cores dos botões*/
+        
+        .tbotoes {
+            BORDER-RIGHT: 2pt solid Black;
+            BORDER-TOP: 2pt solid #D5D5FF;
+            FONT-WEIGHT: bold;
+            FONT-SIZE: 8pt;
+            BORDER-LEFT: 2pt solid #D5D5FF;
+            COLOR: Black;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: #F5F5F5;
+            /*		width: 90;   */
+        }
+        /*Definições de cores e tamanho dos botões*/
+        
+        .tbotoes2 {
+            BORDER-RIGHT: 2pt solid Black;
+            BORDER-TOP: 2pt solid #D5D5FF;
+            FONT-WEIGHT: bold;
+            FONT-SIZE: 8pt;
+            BORDER-LEFT: 2pt solid #D5D5FF;
+            COLOR: Black;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: #F5F5F5;
+            width: 160;
+        }
+        
+        .ObInputCheckBox {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid #F5F5F5;
+            FONT-WEIGHT: bold;
+            FONT-SIZE: 8pt;
+            BORDER-LEFT: 2pt solid #F5F5F5;
+            COLOR: Black;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: #FFFFEE;
+        }
+        /*Combo*/
+        
+        SELECT {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid Silver;
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 12;
+            BORDER-LEFT: 2pt solid #F5F5F5;
+            COLOR: Navy;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial;
+            BACKGROUND-COLOR: #FFFFFF;
+            border-bottom-style: double;
+            z-index: -5;
+        }
+        /*Definições de cores dos inputs*/
+        
+        .ObInputString {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid Silver;
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 12;
+            BORDER-LEFT: 2pt solid #F5F5F5;
+            COLOR: Navy;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial;
+            BACKGROUND-COLOR: #FFFFFF;
+        }
+        /*Definições de cores dos inputs*/
+        
+        .ObInputCep {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid Silver;
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 12;
+            BORDER-LEFT: 2pt solid #F5F5F5;
+            COLOR: Yellow;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial;
+            BACKGROUND-COLOR: #FFFFFF;
+        }
+        /*Definições de cores dos inputs*/
+        
+        .ObInputDate {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid Silver;
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 12;
+            BORDER-LEFT: 2pt solid #F5F5F5;
+            COLOR: Orange;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial;
+            BACKGROUND-COLOR: #FFFFFF;
+        }
+        
+        .ObInputValor {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid Silver;
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 12;
+            BORDER-LEFT: 2pt solid #F5F5F5;
+            COLOR: Red;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial;
+            BACKGROUND-COLOR: #FFFFFF;
+            TEXT-ALIGN: Right;
+        }
+        /*Definições de cores dos inputs*/
+        
+        .ObInputCGC {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid Silver;
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 12;
+            BORDER-LEFT: 2pt solid #F5F5F5;
+            COLOR: Teal;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial;
+            BACKGROUND-COLOR: #FFFFFF;
+        }
+        
+        .ObInputCGCSEMVALIDACAO {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid Silver;
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 12;
+            BORDER-LEFT: 2pt solid #F5F5F5;
+            COLOR: Teal;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial;
+            BACKGROUND-COLOR: #FFFFFF;
+        }
+        /*Definições de cores dos inputs*/
+        
+        .ObInputCep {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid Silver;
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 12;
+            BORDER-LEFT: 2pt solid #F5F5F5;
+            COLOR: Brown;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial;
+            BACKGROUND-COLOR: #FFFFFF;
+        }
+        /*Definições de cores dos inputs*/
+        
+        .ObInputErro {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid Silver;
+            FONT-WEIGHT: normal;
+            FONT-SIZE: 12;
+            BORDER-LEFT: 2pt solid #F5F5F5;
+            COLOR: Navy;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial;
+            background: #FFFFFF;
+            border-color: Red Maroon Maroon Red;
+        }
+        /* Definições de cores da barra de atribuições*/
+        
+        .tbarradeatribuicoes {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid #DEFAEC;
+            FONT-WEIGHT: bold;
+            FONT-SIZE: 8pt;
+            BORDER-LEFT: 2pt solid #DEFAEC;
+            COLOR: Black;
+            BORDER-BOTTOM: 2pt solid Green;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: #F5F5F5;
+        }
+        /*Definicoes de cores do rodape*/
+        
+        .trodape {
+            font: bold;
+            background-color: #00006F;
+            background-position: center;
+            text-decoration: none;
+            color: #DEFAEC;
+            margin: auto;
+        }
+        
+        .trodape:link {
+            font: bold;
+            background-color: #00006F;
+            background-position: center;
+            text-decoration: none;
+            color: #DEFAEC;
+            margin: auto;
+        }
+        
+        .trodape:hover {
+            COLOR: Cyan;
+            FONT-WEIGHT: bold;
+            TEXT-DECORATION: underline
+        }
+        /*Definições de cores dos botões*/
+        
+        .tbotoesrodape {
+            BORDER-RIGHT: #2f0d0d 2pt solid;
+            BORDER-TOP: 2pt solid #DEFAEC;
+            FONT-WEIGHT: bold;
+            FONT-SIZE: 8pt;
+            BORDER-LEFT: 2pt solid #DEFAEC;
+            COLOR: White;
+            BORDER-BOTTOM: 2pt solid Green;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: Teal;
+        }
+        
+        .tlocalizacao {
+            COLOR: White;
+            BACKGROUND-COLOR: Black;
+            FONT-SIZE: 8pt;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            margin-left: -1px;
+            margin-right: -1px;
+            font-weight: bold;
+        }
+        
+        .tcabecalho {
+            BORDER-RIGHT: 1pt solid black;
+            BORDER-TOP: 1pt solid Black;
+            FONT-WEIGHT: bold;
+            FONT-SIZE: 8pt;
+            BORDER-LEFT: 1pt solid Black;
+            COLOR: White;
+            BORDER-BOTTOM: 1pt solid Black;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: Teal;
+            FONT: bold;
+        }
+        
+        .tlabel {
+            FONT-WEIGHT: bold;
+            FONT-SIZE: 8pt;
+            COLOR: Black;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: transparent;
+            FONT: bold;
+        }
+        
+        FIELDSET {
+            border: thin ridge #CCCCFF;
+        }
+        
+        TH {
+            border: thin ridge #CCCCFF;
+            background-color: #330066;
+            color: White;
+        }
+        
+        LEGEND {
+            font-weight: bold;
+        }
+        
+        HR {
+            border: thick groove #CCCCFF;
+        }
+        /*Definições de cores dos botões*/
+        
+        .tpopupbutton {
+            BORDER-RIGHT: 2pt solid Black;
+            BORDER-TOP: 2pt solid #D5D5FF;
+            FONT-WEIGHT: bold;
+            FONT-SIZE: 8pt;
+            BORDER-LEFT: 2pt solid #D5D5FF;
+            COLOR: Black;
+            BORDER-BOTTOM: 2pt solid Black;
+            FONT-FAMILY: Arial, Helvetica, sans-serif;
+            BACKGROUND-COLOR: #F5F5F5;
+        }
+        
+        .tbarraseparatr {
+            height: 5px;
+            border-style: ridge;
+            background-color: Gray;
+        }
+        /*barra frame inferior q informa processando..*/
+        
+        .tProcessando {
+            FONT-COLOR: white;
+            COLOR: white;
+            FONT-WEIGHT: bold;
+            FONT-SIZE: 8pt;
+            FONT-FAMILY: verdana, Arial, Helvetica, sans-serif;
+            background-color: #00006F;
+        }
+        
+        .highlight {
+            background-color: yellow
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="divAction"></div>
+
+    <div id="consulta">
+        <form name="obCadFormLista">
+
+
+            <input type="hidden" name="quant" value="6">
+
+            <table width="90%" align="center" border="0" class="tteladedados" cellpadding="3">
+                <thead>
+                    <tr>
+                        <th colspan="13">
+
+                            Monitor de Cheques
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="13" align="center">
+                            <a href="#" onClick="NetfactorIntegration();"><img src="/base/tests/Ok.png" width="13" height="15" border="0" title="Enviar selecionados"> Enviar selecionados</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="2%">
+                            <b><input title="Marca/Desmarca todos" name="id_geral" type="checkbox" alignment="right" class="ObInputCheckBox" ></b>
+                        </td>
+                        <td><b>Sacado</b></td>
+                        <td><b>CNPJ/CPF</b></td>
+                        <td><b>Valor</b></td>
+                        <td><b>Vencimento</b></td>
+
+                        <td><b>CMC7</b></td>
+
+                        <td><b>Documento</b></td>
+                        <td align="center" nowrap="nowrap"><b>Disparado</b></td>
+                        <td align="center" nowrap="nowrap"><b>Data/Hora do envio</b></td>
+                        <td><b>Situação</b></td>
+                    </tr>
+
+                    <tr bgcolor="#EEE9E9">
+
+                        <td nowrap="nowrap" width="2%" align="center">
+                            <input name="enviar_0" type="checkbox" alignment="right" value="833504" class="ObInputCheckBox">
+                            <input type="hidden" name="enviarIdCarta_" value="">
+                        </td>
+                        <td nowrap="nowrap">11096 - teste</td>
+                        <td nowrap="nowrap">17.897.253/0001-02</td>
+                        <td nowrap="nowrap">1.500,00</td>
+                        <td nowrap="nowrap">22/03/2018</td>
+
+                        <td nowrap="nowrap">033154640180001795279130075173</td>
+
+                        <td nowrap="nowrap">033000179</td>
+                        <td nowrap="nowrap">Enviado</td>
+                        <td nowrap="nowrap">27/03/2018 - 19:35:15</td>
+                        <td nowrap="nowrap" align="center">
+                            <div id="gruexp833504">
+                                <img src="/base/tests/mais.gif" border="0" style="cursor:hand" title="Expandir" width="15" height="15"  >
+                            </div>
+                            <div id="gruocu833504" style="display: none;">
+                                <img src="/base/tests/menos.gif" border="0" style="cursor:hand" title="Ocultar" width="15" height="15"  >
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+
+                        <td nowrap="nowrap" width="2%" align="center">
+                            <input name="enviar_1" type="checkbox" alignment="right" value="833505" class="ObInputCheckBox">
+                            <input type="hidden" name="enviarIdCarta_" value="">
+                        </td>
+                        <td nowrap="nowrap">11097 - teste</td>
+                        <td nowrap="nowrap">00.035.957/3348-71</td>
+                        <td nowrap="nowrap">1.600,00</td>
+                        <td nowrap="nowrap">22/03/2018</td>
+
+                        <td nowrap="nowrap">341409340180008985951150234162</td>
+
+                        <td nowrap="nowrap">341000898</td>
+                        <td nowrap="nowrap">Enviado</td>
+                        <td nowrap="nowrap">27/03/2018 - 19:35:15</td>
+                        <td nowrap="nowrap" align="center">
+                            <div id="gruexp833505">
+                                <img src="/base/tests/mais.gif" border="0" style="cursor:hand" title="Expandir" width="15" height="15"  >
+                            </div>
+                            <div id="gruocu833505" style="display: none;">
+                                <img src="/base/tests/menos.gif" border="0" style="cursor:hand" title="Ocultar" width="15" height="15"  >
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr bgcolor="#EEE9E9">
+
+                        <td nowrap="nowrap" width="2%" align="center">
+                            <input name="enviar_2" type="checkbox" alignment="right" value="833506" class="ObInputCheckBox">
+                            <input type="hidden" name="enviarIdCarta_" value="">
+                        </td>
+                        <td nowrap="nowrap">11098 - teste</td>
+                        <td nowrap="nowrap">09.274.755/0001-59</td>
+                        <td nowrap="nowrap">1.700,00</td>
+                        <td nowrap="nowrap">22/03/2018</td>
+
+                        <td nowrap="nowrap">104347690180000185900300053816</td>
+
+                        <td nowrap="nowrap">104000018</td>
+                        <td nowrap="nowrap">Enviado</td>
+                        <td nowrap="nowrap">27/03/2018 - 19:35:15</td>
+                        <td nowrap="nowrap" align="center">
+                            <div id="gruexp833506">
+                                <img src="/base/tests/mais.gif" border="0" style="cursor:hand" title="Expandir" width="15" height="15"  >
+                            </div>
+                            <div id="gruocu833506" style="display: none;">
+                                <img src="/base/tests/menos.gif" border="0" style="cursor:hand" title="Ocultar" width="15" height="15"  >
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+
+                        <td nowrap="nowrap" width="2%" align="center">
+                            <input name="enviar_3" type="checkbox" alignment="right" value="833507" class="ObInputCheckBox">
+                            <input type="hidden" name="enviarIdCarta_" value="">
+                        </td>
+                        <td nowrap="nowrap">11099 - teste</td>
+                        <td nowrap="nowrap">96.633.524/0001-99</td>
+                        <td nowrap="nowrap">1.800,00</td>
+                        <td nowrap="nowrap">22/03/2018</td>
+
+                        <td nowrap="nowrap">341681860181094085701380858934</td>
+
+                        <td nowrap="nowrap">341109408</td>
+                        <td nowrap="nowrap">Enviado</td>
+                        <td nowrap="nowrap">27/03/2018 - 19:35:15</td>
+                        <td nowrap="nowrap" align="center">
+                            <div id="gruexp833507">
+                                <img src="/base/tests/mais.gif" border="0" style="cursor:hand" title="Expandir" width="15" height="15"  >
+                            </div>
+                            <div id="gruocu833507" style="display: none;">
+                                <img src="/base/tests/menos.gif" border="0" style="cursor:hand" title="Ocultar" width="15" height="15"  >
+                            </div>
+                        </td>
+                    </tr>
+                    <tr bgcolor="#EEE9E9">
+
+                        <td nowrap="nowrap" width="2%" align="center">
+                            <input name="enviar_4" type="checkbox" alignment="right" value="833508" class="ObInputCheckBox">
+                            <input type="hidden" name="enviarIdCarta_" value="">
+                        </td>
+                        <td nowrap="nowrap">11101 - teste</td>
+                        <td nowrap="nowrap">426.409.198-57</td>
+                        <td nowrap="nowrap">1.900,00</td>
+                        <td nowrap="nowrap">22/03/2018</td>
+
+                        <td nowrap="nowrap">341077060180001695621920616048</td>
+
+                        <td nowrap="nowrap">341000013</td>
+                        <td nowrap="nowrap">Enviado</td>
+                        <td nowrap="nowrap">27/03/2018 - 19:35:15</td>
+                        <td nowrap="nowrap" align="center">
+                            <div id="gruexp833508">
+                                <img src="/base/tests/mais.gif" border="0" style="cursor:hand" title="Expandir" width="15" height="15"  >
+                            </div>
+                            <div id="gruocu833508" style="display: none;">
+                                <img src="/base/tests/menos.gif" border="0" style="cursor:hand" title="Ocultar" width="15" height="15"  >
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+
+                        <td nowrap="nowrap" width="2%" align="center">
+                            <input name="enviar_5" type="checkbox" alignment="right" value="833509" class="ObInputCheckBox">
+                            <input type="hidden" name="enviarIdCarta_" value="">
+                        </td>
+                        <td nowrap="nowrap">11102 - teste</td>
+                        <td nowrap="nowrap">496.859.088-18</td>
+                        <td nowrap="nowrap">2.000,00</td>
+                        <td nowrap="nowrap">22/03/2018</td>
+
+                        <td nowrap="nowrap">341579110180000575751630313610</td>
+
+                        <td nowrap="nowrap">341000057</td>
+                        <td nowrap="nowrap">Enviado</td>
+                        <td nowrap="nowrap">27/03/2018 - 19:35:15</td>
+                        <td nowrap="nowrap" align="center">
+                            <div id="gruexp833509">
+                                <img src="/base/tests/mais.gif" border="0" style="cursor:hand" title="Expandir" width="15" height="15"  >
+                            </div>
+                            <div id="gruocu833509" style="display: none;">
+                                <img src="/base/tests/menos.gif" border="0" style="cursor:hand" title="Ocultar" width="15" height="15"  >
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    
+
+</body>
+
+</html>
