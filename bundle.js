@@ -3386,8 +3386,6 @@ function IChequesInformation (ref) {
 ));
 }
 
-/* global window, document, NodeFilter */
-
 var iCheques = new ICheques(window.apiKey);
 
 var q = queue$2(function (content, callback) {
