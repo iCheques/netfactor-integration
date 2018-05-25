@@ -3986,16 +3986,16 @@
 
 	    if (!cmc7Regex.test(n.nodeValue)) { return; }
 
-	    if (!n.parentElement.parentElement.getElementsByClassName('ObInputCheckBox').item(0).checked) {
+	    if (!n.parentNode.parentNode.getElementsByClassName('ObInputCheckBox').item(0).checked) {
 	      return;
 	    }
 
 	    var object = {
-	      currentNode: n.parentElement.parentElement,
+	      currentNode: n.parentNode.parentNode,
 	      cmc: get_1(n, 'nodeValue'),
-	      vencimento: new Date(get_1(n, 'parentElement.previousElementSibling.textContent').split('/').reverse().join('-')),
-	      valor: parseFloat(get_1(n, 'parentElement.previousElementSibling.previousElementSibling.textContent', '0').replace('.', '').replace(',', '.')),
-	      documento: get_1(n, 'parentElement.previousElementSibling.previousElementSibling.previousElementSibling.textContent'),
+	      vencimento: new Date(get_1(n, 'parentNode.previousElementSibling.textContent').split('/').reverse().join('-')),
+	      valor: parseFloat(get_1(n, 'parentNode.previousElementSibling.previousElementSibling.textContent', '0').replace('.', '').replace(',', '.')),
+	      documento: get_1(n, 'parentNode.previousElementSibling.previousElementSibling.previousElementSibling.textContent'),
 	    };
 
 	    eventEmitter$$1.emit('init', { object: object });
