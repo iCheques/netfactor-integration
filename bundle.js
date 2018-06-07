@@ -3935,7 +3935,7 @@
 	      h( 'table', { width: "100%", border: "0", bgcolor: "transparent" },
 	        h( 'tbody', null,
 	          h( 'tr', { style: { backgroundColor: 'transparent' } },
-	            h( 'td', { width: "2%" }, h( 'img', { src: "/base/tests/quebra.gif", alt: "#", border: "0" })),
+	            h( 'td', { width: "2%" }, h( 'img', { src: "/netFactor/images/quebra.gif", alt: "#", border: "0" })),
 	            h( 'td', null, h( 'b', null, name ) )
 	          ),
 	          h( 'tr', { style: { backgroundColor: 'transparent' } },
