@@ -1,4 +1,4 @@
-# netfactor-integration@1.2.0
+# netfactor-integration@1.2.1
 Script de integração com a NetFactor
 
 ## TL;DR ##

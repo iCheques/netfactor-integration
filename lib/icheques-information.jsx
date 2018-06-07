@@ -6,7 +6,7 @@ export default ({ name, value }) => (<tr bgcolor="transparent">
       <table width="100%" border="0" bgcolor="transparent">
         <tbody>
           <tr style={{ backgroundColor: 'transparent' }}>
-            <td width="2%"><img src="/base/tests/quebra.gif" alt="#" border="0" /></td>
+            <td width="2%"><img src="/netFactor/images/quebra.gif" alt="#" border="0" /></td>
             <td><b>{name}</b></td>
           </tr>
           <tr style={{ backgroundColor: 'transparent' }}>
