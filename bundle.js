@@ -3993,7 +3993,7 @@
 	    var object = {
 	      currentNode: n.parentNode.parentNode,
 	      cmc: get_1(n, 'nodeValue'),
-	      vencimento: new Date(get_1(n, 'parentNode.previousElementSibling.textContent').split('/').reverse().join()),
+	      vencimento: new Date(get_1(n, 'parentNode.previousElementSibling.textContent').split('/').reverse().join('-')),
 	      valor: parseFloat(get_1(n, 'parentNode.previousElementSibling.previousElementSibling.textContent', '0').replace('.', '').replace(',', '.')),
 	      documento: get_1(n, 'parentNode.previousElementSibling.previousElementSibling.previousElementSibling.textContent'),
 	    };
