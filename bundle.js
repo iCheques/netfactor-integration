@@ -3983,7 +3983,6 @@
 	  var n;
 
 	  var loop = function () {
-
 	    if (!cmc7Regex.test(n.nodeValue)) { return; }
 
 	    if (!n.parentNode.parentNode.getElementsByClassName('ObInputCheckBox').item(0).checked) {
@@ -3993,7 +3992,7 @@
 	    var object = {
 	      currentNode: n.parentNode.parentNode,
 	      cmc: get_1(n, 'nodeValue'),
-	      vencimento: new Date(get_1(n, 'parentNode.previousElementSibling.textContent').split('/').reverse().join('-')),
+	      vencimento: new Date(((get_1(n, 'parentNode.previousElementSibling.textContent').split('/').reverse().join('-')) + " 00:00:00.0000")),
 	      valor: parseFloat(get_1(n, 'parentNode.previousElementSibling.previousElementSibling.textContent', '0').replace('.', '').replace(',', '.')),
 	      documento: get_1(n, 'parentNode.previousElementSibling.previousElementSibling.previousElementSibling.textContent'),
 	    };
@@ -4004,7 +4003,6 @@
 	      var props = ref.props;
 	      var error = ref.error;
 	      var currentNode = ref.currentNode;
-
 
 	      if (error) {
 	        var errorContent = render(h(IChequesInformation, {
@@ -4039,7 +4037,6 @@
 	      }), document.body);
 	      currentNode.parentNode.insertBefore(displayContent, currentNode.nextElementSibling);
 	    });
-
 	  };
 
 	  while (n = walk.nextNode()) loop();
